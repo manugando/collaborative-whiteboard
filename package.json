@@ -1,0 +1,24 @@
+{
+  "name": "collaborative-whiteboard",
+  "version": "1.0.0",
+  "description": "Very simple collaborative whiteboard realized using socket.io and paper.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/manugando/collaborative-whiteboard.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/manugando/collaborative-whiteboard/issues"
+  },
+  "homepage": "https://github.com/manugando/collaborative-whiteboard#readme",
+  "dependencies": {
+    "express": "^4.13.4",
+    "fabric": "^1.6.2",
+    "socket.io": "^1.4.6"
+  }
+}

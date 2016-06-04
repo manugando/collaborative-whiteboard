@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Collaborative whiteboard</title>
+	<style type="text/css">
+		#container {
+			border: 3px solid #37474F;
+			border-radius: 10px;
+			display: inline-block
+		}
+
+	</style>
+</head>
+<body>
+	<h1>Collaborative whiteboard</h1>
+	<div id="container">
+		<canvas id="canvas" width=800 height=600></canvas>
+	</div>
+	<div id="tools">
+		<button onclick="clearWhiteboard();">CLEAR</button>
+	</div>
+	
+	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript" src="/fabric/dist/fabric.js"></script>
+
+	<script type="text/javascript">
+		var socket = io();
+		var canvas = new fabric.Canvas('canvas');
+		var brushWidth = 5;
+
+		canvas.isDrawingMode = true;
+		canvas.freeDrawingBrush.width = brushWidth;
+		canvas.on('path:created', function(data) {
+			var pointArray = data.path.path;
+			socket.emit('drawPath', pointArray);
+		});
+
+		socket.on('drawPath', function(data) {
+			var path = new fabric.Path(data);
+			path.set({fill: null, stroke : 'rgb(0,0,0)', strokeWidth: brushWidth});
+			canvas.add(path);
+		});
+
+		socket.on('clearWhiteboard', function(data) {
+			canvas.clear();
+		});
+
+		function clearWhiteboard() {
+			canvas.clear();
+			socket.emit('clearWhiteboard');
+		}
+
+	</script>
+</body>
+</html>
