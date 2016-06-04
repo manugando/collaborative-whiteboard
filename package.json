@@ -1,7 +1,7 @@
 {
   "name": "collaborative-whiteboard",
   "version": "1.0.0",
-  "description": "Very simple collaborative whiteboard realized using socket.io and paper.js",
+  "description": "Very simple collaborative whiteboard realized using socket.io and Fabric",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -19,6 +19,7 @@
   "dependencies": {
     "express": "^4.13.4",
     "fabric": "^1.6.2",
+    "mongoose": "^4.4.19",
     "socket.io": "^1.4.6"
   }
 }

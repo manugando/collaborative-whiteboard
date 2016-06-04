@@ -31,13 +31,15 @@
 		canvas.isDrawingMode = true;
 		canvas.freeDrawingBrush.width = brushWidth;
 		canvas.on('path:created', function(data) {
-			var pointArray = data.path.path;
-			socket.emit('drawPath', pointArray);
+			console.log(data);
+			var path = data.path;
+			socket.emit('drawPath', path);
 		});
 
 		socket.on('drawPath', function(data) {
-			var path = new fabric.Path(data);
-			path.set({fill: null, stroke : 'rgb(0,0,0)', strokeWidth: brushWidth});
+			console.log(data);
+			var path = new fabric.Path(data.path);
+			path.set({fill: null, stroke : data.stroke, strokeWidth: data.strokeWidth});
 			canvas.add(path);
 		});
 

@@ -2,8 +2,10 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var mongoose = require('mongoose');
+var Path = require('./models/path');
 
-var paths = [];
+mongoose.connect('mongodb://localhost/collaborative-whiteboard');
 
 app.get('/', function(req, res) {
 	res.sendFile(__dirname + '/index.html');
@@ -14,20 +16,38 @@ app.use(express.static('node_modules'));
 io.on('connection', function(socket) {
 	console.log('User connected');
 
-	paths.forEach(function(item) {
-	    socket.emit('drawPath', item);
+	Path.find({}, function(err, paths) {
+		if (err) throw err;
+
+		paths.forEach(function(item) {
+			socket.emit('drawPath', item);
+		});
 	});
 
 	socket.on('drawPath', function(data) {
 		console.log('drawPath received');
-		paths.push(data);
-    	socket.broadcast.emit('drawPath', data);
+
+		var newPath = new Path ({
+			strokeWidth: data.strokeWidth,
+			stroke: data.stroke,
+			path: data.path
+		});
+
+		newPath.save(function(err, path) {
+			if (err) throw err;
+			console.log('Path saved!');
+			socket.broadcast.emit('drawPath', path);
+		});
   	});
 
   	socket.on('clearWhiteboard', function() {
 		console.log('clearWhiteboard received');
-		paths.length = 0
-    	socket.broadcast.emit('clearWhiteboard');
+		socket.broadcast.emit('clearWhiteboard');
+		
+		Path.remove({}, function(err) {
+			if (err) throw err;
+			console.log('Collection removed!');
+		});
   	});
 });
 
