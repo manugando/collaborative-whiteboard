@@ -2,7 +2,19 @@
 <html>
 <head>
 	<title>Collaborative whiteboard</title>
+	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 	<style type="text/css">
+		* {
+			font-family: 'Roboto', sans-serif;
+		}
+
+		button {
+			background: #FAFAFA;
+			border: 3px solid #37474F;
+			border-radius: 10px;
+			padding: 15px;
+		}
+
 		#container {
 			border: 3px solid #37474F;
 			border-radius: 10px;
@@ -12,7 +24,8 @@
 	</style>
 </head>
 <body>
-	<h1>Collaborative whiteboard</h1>
+	<h1>Collaborative Whiteboard</h1>
+	<p>Just draw something and it will appear on all connected devices</p>
 	<div id="container">
 		<canvas id="canvas" width=800 height=600></canvas>
 	</div>
@@ -32,7 +45,12 @@
 		canvas.freeDrawingBrush.width = brushWidth;
 		canvas.on('path:created', function(data) {
 			console.log(data);
-			var path = data.path;
+			var path = 	
+				{
+					strokeWidth: data.path.strokeWidth,
+					stroke: data.path.stroke,
+					path: data.path.path
+				};
 			socket.emit('drawPath', path);
 		});
 

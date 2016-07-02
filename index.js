@@ -27,13 +27,7 @@ io.on('connection', function(socket) {
 	socket.on('drawPath', function(data) {
 		console.log('drawPath received');
 
-		var newPath = new Path ({
-			strokeWidth: data.strokeWidth,
-			stroke: data.stroke,
-			path: data.path
-		});
-
-		newPath.save(function(err, path) {
+		Path(data).save(function(err, path) {
 			if (err) throw err;
 			console.log('Path saved!');
 			socket.broadcast.emit('drawPath', path);
